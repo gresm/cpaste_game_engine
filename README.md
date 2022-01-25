@@ -1,2 +1,2 @@
-# cpaste_game_engine
+# Cpaste Game Engine
 pygame-powered game engine
