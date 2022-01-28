@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import atexit
 from pathlib import Path
 
 
@@ -19,9 +20,37 @@ this_file = Path(__file__)
 this_folder = this_file.parent
 themes_folder = this_folder / "themes"
 _themes: dict[str, _Theme] = {}
+theme = this_folder / "current_theme.json"
+current_theme: str = ""
 
 
-def get_theme(name: str):
+def set_current_theme(name: str):
+    global current_theme
+
+    current_theme = name
+
+    if name == "":
+        default_theme()
+        return True
+
+    thm = _get_theme(name)
+    if thm is None:
+        default_theme()
+        return False
+
+    _write_to_current_theme(json.dumps(thm))
+    return True
+
+
+def default_theme():
+    _write_to_current_theme("{}")
+
+
+def _write_to_current_theme(txt: str):
+    theme.write_text(txt)
+
+
+def _get_theme(name: str):
     """
     Returns game from name, if not found, returns None
     :param name: short name or full name
@@ -31,9 +60,9 @@ def get_theme(name: str):
         return _themes[name].theme
 
     for el in _themes:
-        theme = _themes[el]
-        if theme.full_name == name:
-            return theme.theme
+        th = _themes[el]
+        if th.full_name == name:
+            return th.theme
     return None
 
 
@@ -43,8 +72,8 @@ def get_theme_names() -> set[str]:
     """
     ret: set[str] = set()
     for name in _themes:
-        theme = _themes[name]
-        ret.add(theme.full_name)
+        th = _themes[name]
+        ret.add(th.full_name)
     return ret
 
 
@@ -55,8 +84,8 @@ def get_theme_short_names() -> set[str]:
     """
     ret: set[str] = set()
     for name in _themes:
-        theme = _themes[name]
-        ret.add(theme.file_name)
+        th = _themes[name]
+        ret.add(th.file_name)
     return ret
 
 
@@ -70,3 +99,4 @@ def reload_themes():
 
 
 reload_themes()
+atexit.register(default_theme)

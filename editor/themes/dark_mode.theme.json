@@ -1,4 +1,8 @@
 [
   "Default Dark Mode",
-  {}
+  {
+    "defaults": {
+
+    }
+  }
 ]
