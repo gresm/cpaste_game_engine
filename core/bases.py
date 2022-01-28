@@ -5,6 +5,35 @@ from typing import Type
 import re
 
 
+def _parse_template(template: str):
+    var_symbol = "%"
+    var_valid = r"\w"
+    cur_name = ""
+    is_var = False
+    ret = _Template()
+
+    for char in template:
+        if char == var_symbol:
+            if is_var:
+                ret.append_field(cur_name)
+            else:
+                ret.append_txt(cur_name)
+            is_var = not is_var
+            cur_name = ""
+        else:
+            if is_var:
+                if re.match(var_valid, char):
+                    cur_name += char
+                else:
+                    is_var = False
+            else:
+                cur_name += char
+
+    if cur_name != "":
+        ret.append_txt(cur_name)
+    return ret
+
+
 class _Template:
     def __init__(self):
         self.txt: list[str | tuple[str]] = []
@@ -38,35 +67,6 @@ class _Template:
             else:
                 ret += el
         return ret
-
-
-def _parse_template(template: str):
-    var_symbol = "%"
-    var_valid = r"\w"
-    cur_name = ""
-    is_var = False
-    ret = _Template()
-
-    for char in template:
-        if char == var_symbol:
-            if is_var:
-                ret.append_field(cur_name)
-            else:
-                ret.append_txt(cur_name)
-            is_var = not is_var
-            cur_name = ""
-        else:
-            if is_var:
-                if re.match(var_valid, char):
-                    cur_name += char
-                else:
-                    is_var = False
-            else:
-                cur_name += char
-
-    if cur_name != "":
-        ret.append_txt(cur_name)
-    return ret
 
 
 class TypeInfo:
