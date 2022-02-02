@@ -2,7 +2,10 @@
   "Default Dark Mode",
   {
     "defaults": {
-
+      "colours": {
+        "normal_bg": "black",
+        "normal_text": "white"
+      }
     }
   }
 ]
