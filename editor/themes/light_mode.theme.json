@@ -4,8 +4,31 @@
     "defaults": {
       "colours": {
         "normal_bg": "white",
-        "normal_text": "black"
+        "hovered_bg": "#d0d0d0",
+        "normal_text": "black",
+        "hovered_text": "black",
+        "clicked_text": "red",
+        "normal_border": "black",
+        "hovered_border": "black"
       }
+    },
+    "button": {
+      "font": {
+        "name": "fixed-sys",
+        "size": "15",
+        "regular_path": "editor/fonts/FSEX300.ttf"
+      },
+      "misc": {
+        "border_width": "5"
+      }
+    }
+  },
+  {
+    "template": {
+      "colours": {},
+      "font": {},
+      "images": {},
+      "misc": {}
     }
   }
 ]

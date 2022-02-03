@@ -140,7 +140,6 @@ def handle_event(event: pg.event.Event):
 
 def reset():
     global manager
-    print(themes.theme)
     manager = pgg.UIManager(wd.size, str(themes.theme))
 
 
