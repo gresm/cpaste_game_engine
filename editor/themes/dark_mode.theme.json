@@ -5,10 +5,13 @@
       "colours": {
         "normal_bg": "black",
         "hovered_bg": "#101010",
+        "active_bg": "#15152b",
         "normal_text": "white",
         "hovered_text": "white",
+        "active_text": "white",
         "normal_border": "white",
-        "hovered_border": "white"
+        "hovered_border": "white",
+        "active_border": "white"
       }
     },
     "button": {

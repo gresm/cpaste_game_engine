@@ -4,12 +4,14 @@
     "defaults": {
       "colours": {
         "normal_bg": "white",
-        "hovered_bg": "#d0d0d0",
+        "hovered_bg": "#c8c8c8",
+        "active_bg": "#a0a0ff",
         "normal_text": "black",
         "hovered_text": "black",
-        "clicked_text": "red",
+        "active_text": "black",
         "normal_border": "black",
-        "hovered_border": "black"
+        "hovered_border": "black",
+        "active_border": "black"
       }
     },
     "button": {
