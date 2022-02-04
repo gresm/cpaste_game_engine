@@ -151,6 +151,7 @@ def add(gui: GUIPromise):
 def generate(gui: GUIPromise):
     reset()
     add(gui)
+    return gui_info
 
 
 manager: pgg.UIManager

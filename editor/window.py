@@ -45,7 +45,7 @@ __frame_rate = 0
 
 def tick():
     global __frame_rate
-    __frame_rate = clock.tick(fps)
+    __frame_rate = clock.tick(fps)/1000.0
     return __frame_rate
 
 
