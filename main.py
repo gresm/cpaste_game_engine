@@ -1,2 +1,4 @@
-import os
-os.system("python3 -m editor")
+import editor
+
+
+editor.run()
