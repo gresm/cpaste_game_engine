@@ -15,7 +15,7 @@ setup(
     package_dir={"cpaste_editor": "editor"},
     url="https://github.com/gresm/cpaste_game_engine",
     classifiers=[
-        "Development Status:: 2 - Pre-Alpha",
+        "Development Status :: 2 - Pre-Alpha",
         "Intended Audience :: Developers",
         "License :: OSI Approved",
         "License :: OSI Approved :: MIT License",
