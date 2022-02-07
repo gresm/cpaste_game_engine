@@ -35,7 +35,7 @@ else:
     long_desc = pt.Path("README.md")
     setup(
         name="cpaste",
-        version="0.0.1",
+        version="0.0.2",
         author="gresm",
         description="Game engine written in python using pygame",
         long_description=long_desc.read_text(),
@@ -45,7 +45,7 @@ else:
         package_dir={"cpaste": "main"},
         url="https://github.com/gresm/cpaste_game_engine",
         classifiers=[
-            "Development Status:: 2 - Pre-Alpha",
+            "Development Status :: 2 - Pre-Alpha",
             "Intended Audience :: Developers",
             "Intended Audience :: Education",
             "Intended Audience :: End Users/Desktop",

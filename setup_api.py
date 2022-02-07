@@ -5,7 +5,7 @@ reqs = pt.Path("requirements-api.txt")
 long_desc = pt.Path("README-api.md")
 setup(
     name="cpaste-api",
-    version="0.0.1",
+    version="0.0.2",
     author="gresm",
     description="Subpackage of cpaste - a game engine written in python using pygame",
     long_description=long_desc.read_text(),

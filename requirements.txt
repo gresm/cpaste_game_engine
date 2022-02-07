@@ -1,5 +1,5 @@
 cpaste-api
 cpaste-core
-cpaste-engine
+cpaste-editor
 pygame-gui
 pygame
