@@ -130,7 +130,3 @@ dmypy.json
 
 # Pycharm editor
 .idea/
-
-
-# Twine token
-.pypirc
