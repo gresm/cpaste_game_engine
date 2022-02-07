@@ -19,19 +19,13 @@ def del_dir(folder: str):
 
 
 setups = [
-        "setup_api.py",
-        "setup_core.py",
-        "setup_editor.py"
-    ]
+    "setup_api.py",
+    "setup_core.py",
+    "setup_editor.py",
+    "setup.py"
+]
 
-
-if len(argv) >= 2 and argv[1] == "automate":
-    for st in setups:
-        print(f"running {st}")
-        os.system(f"python3 {st} build")
-        os.system(f"python3 {st} install")
-        del_dir(str(pt.Path("build").absolute()))
-elif len(argv) >= 2 and argv[1] == "all":
+if len(argv) >= 2 and argv[1] == "all":
     ag = " ".join(argv[2:])
     for st in setups:
         print(f"running {st}")
