@@ -5,7 +5,7 @@ reqs = pt.Path("requirements-editor.txt")
 long_desc = pt.Path("README-engine.md")
 setup(
     name="cpaste-editor",
-    version="0.0.6",
+    version="0.0.7",
     author="gresm",
     description="Graphical interface of cpaste - a game engine written in python using pygame",
     long_description=long_desc.read_text(),
@@ -23,6 +23,9 @@ setup(
         "cpaste_editor.gui_definitions": "editor/gui_definitions",
         "cpaste_editor.themes": "editor/themes"
     },
+    data_files=[
+        ("cpaste_editor.themes", ["*.json", "*.theme.json"])
+    ],
     url="https://github.com/gresm/cpaste_game_engine",
     classifiers=[
         "Development Status :: 2 - Pre-Alpha",
