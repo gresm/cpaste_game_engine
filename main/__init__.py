@@ -1,1 +1,1 @@
-from cpaste_engine import run
+from cpaste_editor import run
