@@ -35,7 +35,7 @@ else:
     long_desc = pt.Path("README.md")
     setup(
         name="cpaste",
-        version="0.0.4",
+        version="0.0.5",
         author="gresm",
         description="Game engine written in python using pygame",
         long_description=long_desc.read_text(),
