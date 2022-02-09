@@ -1,4 +1,5 @@
-from . import run
+from cpaste_editor import run
+from cpaste_editor.themes import _on_package_delete as themes_unload
 import argparse
 from os import system
 
@@ -8,6 +9,14 @@ parser.add_argument("-d", "--delete", action="store_true", help="Delete cpaste e
 args = parser.parse_args()
 
 if args.delete:
+    print("unloading cpaste-api")
+    pass
+    print("unloading cpaste-core")
+    pass
+    print("unloading cpoaste-editor")
+    themes_unload()
+    print("unloading cpaste")
+    pass
     print("deleting cpaste-api")
     system("pip uninstall -y cpaste-api")
     print("deleting cpaste-core")

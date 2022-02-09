@@ -98,5 +98,9 @@ def reload_themes():
             _themes[path.name.split(".")[0]] = _Theme(path.name.split(".")[0], json.loads(path.read_text()))
 
 
+def _on_package_delete():
+    atexit.unregister(default_theme)
+
+
 reload_themes()
 atexit.register(default_theme)
