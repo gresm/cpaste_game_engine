@@ -6,6 +6,7 @@
         "normal_bg": "black",
         "hovered_bg": "#101010",
         "active_bg": "#15152b",
+        "selected_bg": "#101010",
         "normal_text": "white",
         "hovered_text": "white",
         "active_text": "white",

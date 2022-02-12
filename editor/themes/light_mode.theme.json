@@ -5,7 +5,8 @@
       "colours": {
         "normal_bg": "white",
         "hovered_bg": "#c8c8c8",
-        "active_bg": "#a0a0ff",
+        "active_bg": "#a0a0e0",
+        "selected_bg": "#a0a0e0",
         "normal_text": "black",
         "hovered_text": "black",
         "active_text": "black",
