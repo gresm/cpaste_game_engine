@@ -12,7 +12,6 @@ class GUIObjectPromise:
             self, relative_rect: pg.Rect | tuple[int, int, int, int],
             gui_type: Type[pgg.core.ui_element.UIElement],
             container: pgg.core.ui_container.IContainerLikeInterface = None,
-            starting_height: int = 1,
             anchors: dict[str, str] = None,
             visible: int = 1, **kwargs
     ):
@@ -20,7 +19,6 @@ class GUIObjectPromise:
         self.gui_type = gui_type
 
         self.container = container
-        self.starting_height = starting_height
         self.anchors = anchors
         self.visible = visible
 
@@ -30,13 +28,11 @@ class GUIObjectPromise:
             self, ui_manager: pgg.core.interfaces.IUIManagerInterface,
             container: pgg.core.ui_container.IContainerLikeInterface = None
     ):
-        # noinspection PyArgumentList
         return self.gui_type(
             relative_rect=self.relative_rect,
             manager=ui_manager,
             container=self.container if container is None else container,
             **self.kwargs,
-            starting_height=self.starting_height,
             anchors=self.anchors,
             visible=self.visible
         )
