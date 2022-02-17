@@ -3,22 +3,21 @@ from __future__ import annotations
 import pygame as pg
 import pygame_gui as pgg
 
-from typing import Type
 from . import themes, window as wd
+from typing import Type, cast
+from pygame_gui.core.interfaces import IContainerLikeInterface
 
 
 class GUIObjectPromise:
     def __init__(
             self, relative_rect: pg.Rect | tuple[int, int, int, int],
             gui_type: Type[pgg.core.ui_element.UIElement],
-            container: pgg.core.ui_container.IContainerLikeInterface = None,
             anchors: dict[str, str] = None,
             visible: int = 1, **kwargs
     ):
         self.relative_rect = pg.Rect(relative_rect)
         self.gui_type = gui_type
 
-        self.container = container
         self.anchors = anchors
         self.visible = visible
 
@@ -31,45 +30,11 @@ class GUIObjectPromise:
         return self.gui_type(
             relative_rect=self.relative_rect,
             manager=ui_manager,
-            container=self.container if container is None else container,
+            container=container,
             **self.kwargs,
             anchors=self.anchors,
             visible=self.visible
         )
-
-    @classmethod
-    def from_raw(
-            cls,
-            raw: tuple[
-                tuple[int, int, int, int] | pg.Rect,
-                Type[pgg.core.ui_element.UIElement],
-                None | tuple[
-                    pgg.core.ui_container.IContainerLikeInterface | None,
-                    int, dict[str, str], int
-                ],
-                None | dict[str, ...]
-            ]
-    ):
-        rect = pg.Rect(raw[0])
-        gui_type = raw[1]
-
-        if raw[2] is None:
-            named = {}
-        else:
-            named = {
-                "container": raw[2][0], "starting_height": raw[2][1],
-                "anchors": raw[2][2], "visible": raw[2][3]
-            }
-
-        if raw[3] is None:
-            kwargs = {}
-        else:
-            kwargs = raw[3]
-
-        kw = kwargs.copy()
-        kw.update(named)
-
-        return cls(rect, gui_type, **kw)
 
 
 class GUIPromise:
@@ -87,28 +52,30 @@ class GUIPromise:
 
         return GUIGenerated(generated)
 
-    @classmethod
-    def from_raw(
-            cls,
-            raw: dict[
-                str,
-                tuple[
-                    tuple[int, int, int, int] | pg.Rect,
-                    Type[pgg.core.ui_element.UIElement],
-                    None | tuple[
-                        pgg.core.ui_container.IContainerLikeInterface,
-                        int, dict[str, str], int
-                    ],
-                    None | dict[str, ...]
-                ]
-            ]
+
+class GUIContainerPromise(GUIPromise, GUIObjectPromise):
+    def __init__(
+            self, promises: dict[str, GUIObjectPromise],
+            relative_rect: pg.Rect | tuple[int, int, int, int],
+            gui_type: Type[IContainerLikeInterface, pgg.core.UIElement] = pgg.core.UIContainer,
+            anchors: dict[str, str] = None,
+            visible: int = 1,
+            **kwargs
     ):
-        parsed = {}
+        super(GUIPromise).__init__(relative_rect, gui_type, anchors=anchors, visible=visible, **kwargs)
+        super(GUIObjectPromise, self).__init__(promises)
 
-        for name in raw:
-            parsed[name] = GUIObjectPromise.from_raw(raw[name])
+    def generate(
+            self, ui_manager: pgg.core.interfaces.IUIManagerInterface,
+            container: pgg.core.ui_container.IContainerLikeInterface = None
+    ):
+        container = cast(IContainerLikeInterface, GUIObjectPromise.generate(self, ui_manager, container))
+        generated = {}
 
-        return cls(parsed)
+        for name in self.promises:
+            generated[name] = self.promises[name].generate(ui_manager, container)
+
+        return GUIGenerated(generated)
 
 
 class GUIGenerated:
