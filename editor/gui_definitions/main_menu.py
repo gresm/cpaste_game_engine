@@ -1,7 +1,7 @@
 import pygame as pg
 import pygame_gui as pgg
 
-from . import GUIPromise, Obj
+from . import GUIPromise, Obj, Container
 
 
 menu_gui = GUIPromise(

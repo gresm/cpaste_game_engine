@@ -32,6 +32,8 @@ def main():
                     done = True
                 elif ev.ui_element is current_gui.open:
                     current_gui = gui.generate(gd.open_gui)
+                elif ev.ui_element is current_gui.back:
+                    current_gui = gui.generate(gd.menu_gui)
 
         window.window.fill((0, 0, 0) if is_black else (255, 255, 255))
 
