@@ -14,9 +14,21 @@ menu_gui = GUIPromise(
 )
 
 
+# pgg.elements.UIScrollingContainer
+
+
+open_gui_back_rect = pg.Rect(0, 0, 200, 50)
+open_gui_back_rect.bottomleft = 25, -25
+
 open_gui = GUIPromise(
     {
-        "test": Obj((25, 25, 200, 50), pgg.elements.UILabel, text="test")
+        "back": Obj(
+            open_gui_back_rect, pgg.elements.UIButton, text="go back", anchors={
+                "left": "left", "right": "right", "top": "bottom", "bottom": "bottom"
+            }
+        ),
+        "label1": Obj((25, 25, 200, 50), pgg.elements.UILabel, text="choose:"),
+        "projects": Obj((50, 50, 200, 200), pgg.elements.UIScrollingContainer)
     }
 )
 

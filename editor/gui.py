@@ -118,8 +118,13 @@ class GUIGenerated:
         for name in generated:
             self.__dict__[name] = generated[name]
 
-    def __getattr__(self, item) -> pgg.core.ui_element.UIElement:
-        return self.generated[item]
+    def __getattr__(self, item) -> pgg.core.ui_element.UIElement | None:
+        if item in self.generated:
+            return self.generated[item]
+        return None
+
+    def __contains__(self, item):
+        return item in self.generated
 
 
 def draw(surface: pg.Surface):
