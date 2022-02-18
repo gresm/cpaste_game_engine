@@ -15,13 +15,15 @@ setup(
         "cpaste_editor",
         "cpaste_editor.fonts",
         "cpaste_editor.gui_definitions",
-        "cpaste_editor.themes"
+        "cpaste_editor.themes",
+        "cpaste_editor.tools"
     ],
     package_dir={
         "cpaste_editor": "editor",
         "cpaste_editor.fonts": "editor/fonts",
         "cpaste_editor.gui_definitions": "editor/gui_definitions",
-        "cpaste_editor.themes": "editor/themes"
+        "cpaste_editor.themes": "editor/themes",
+        "cpaste_editor.tools": "editor/tools"
     },
     package_data={
         "": ["*.json", "*.ttf"],

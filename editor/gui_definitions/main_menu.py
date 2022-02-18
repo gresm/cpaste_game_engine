@@ -28,7 +28,16 @@ open_gui = GUIPromise(
             }
         ),
         "label1": Obj((25, 25, 200, 50), pgg.elements.UILabel, text="choose:"),
-        "projects": Obj((50, 50, 200, 200), pgg.elements.UIScrollingContainer)
+        "projects": Obj((50, 50, 200, 200), pgg.elements.UIScrollingContainer),
+        "saves": Container(
+            (25, 25, 200, 50),
+            GUIPromise(
+                {
+                    "label1": Obj((25, 25, 200, 50), pgg.elements.UILabel, text="choose:"),
+                }
+            ),
+            gui_type=pgg.elements.UIScrollingContainer
+        )
     }
 )
 
