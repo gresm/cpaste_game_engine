@@ -4,6 +4,8 @@ import pygame as pg
 import pygame_gui as pgg
 
 from . import themes, window as wd
+from .tools import ObjectPromise
+
 from typing import Type
 from pygame_gui.core.interfaces import IContainerLikeInterface
 from pygame_gui.core import UIContainer
@@ -25,21 +27,13 @@ class GUIObjectPromise:
         self.visible = visible
 
         self.kwargs = kwargs
-
-    def __getattr__(self, item):
-        pass
-
-    def __contains__(self, item):
-        pass
-
-    def __getitem__(self, item):
-        pass
+        self.promise = ObjectPromise()
 
     def generate(
             self, ui_manager: pgg.core.interfaces.IUIManagerInterface,
             container: pgg.core.ui_container.IContainerLikeInterface = None
     ):
-        return self.gui_type(
+        ret = self.gui_type(
             relative_rect=self.relative_rect,
             manager=ui_manager,
             container=self.container or container,
@@ -47,6 +41,8 @@ class GUIObjectPromise:
             anchors=self.anchors,
             visible=self.visible
         )
+        self.promise.solve(ret)
+        return ret
 
 
 class GUIPromise:
@@ -89,7 +85,18 @@ class GUIContainerPromise(GUIObjectPromise):
             visible: int = 1, **kwargs
     ):
         super(GUIContainerPromise, self).__init__(relative_rect, gui_type, container, anchors, visible, **kwargs)
-        self.container_content = container_content
+        self.content = container_content
+
+    def __getattr__(self, item) -> GUIObjectPromise | None:
+        if item in self.content:
+            return self.content[item]
+        return None
+
+    def __contains__(self, item):
+        return item in self.content
+
+    def __getitem__(self, item):
+        return self.__getattr__(self.content)
 
     def generate(
             self, ui_manager: pgg.core.interfaces.IUIManagerInterface,
@@ -100,7 +107,7 @@ class GUIContainerPromise(GUIObjectPromise):
             me = me.get_container()
 
         # noinspection PyTypeChecker
-        content = self.container_content.generate(ui_manager, me)
+        content = self.content.generate(ui_manager, me)
         return GUIContainerGenerated(content, me)
 
 
