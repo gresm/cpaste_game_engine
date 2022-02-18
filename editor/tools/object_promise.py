@@ -2,6 +2,17 @@ from __future__ import annotations
 
 
 _required_magic_methods = set(dir(object))
+_add_keywords = {
+    '__new__', '__init__', '__del__', '__pos__', '__neg__', '__abs__', '__invert__', '__round__', '__floor__',
+    '__ceil__', '__trunc__', '__iadd__', '__isub__', '__imul__', '__ifloordiv__', '__idiv__', '__itruediv__',
+    '__imod__', '__ipow__', '__ilshift__', '__irshift__', '__iand__', '__ior__', '__ixor__', '__int__',
+    '__float__', '__complex__', '__oct__', '__hex__', '__index__', '__trunc__', '__str__', '__repr__',
+    '__unicode__', '__format__', '__hash__', '__nonzero__', '__dir__', '__sizeof__', '__getattr__',
+    '__setattr__', '__delattr__', '__add__', '__sub__', '__mul__', '__floordiv__', '__truediv__',
+    '__mod__', '__pow__', '__lt__', '__le__', '__eq__', '__ne__', '__ge__'
+}
+
+_add_keywords = _add_keywords.difference(_required_magic_methods)
 
 
 def _is_important_key(key: str):
@@ -10,10 +21,22 @@ def _is_important_key(key: str):
 
 def _is_sub_important(key: str):
     return key in {"__init__", "__getattribute__", "__setattr__", "__delattr__", "__get__"} or key == "solve"\
-           or (key.startswith("_") and not key.startswith("__"))
+           or (
+                   (len(key) == 0 or key[0] == "_")
+                   and not (len(key) <= 1 or key[1] == "_")
+           )
+
+
+def _generate_magic_method(name: str):
+    gl = {}
+    exec(f"def {name}(self, *args, **kwargs):\n return self._get(\"{name}\", False)(*args, **kwargs)", gl)
+    return gl[name]
 
 
 class ObjectPromise:
+    for _ in _add_keywords:
+        locals()[_] = _generate_magic_method(_)
+
     def __init__(self):
         self._solved = False
         self._solution = None
@@ -27,15 +50,6 @@ class ObjectPromise:
 
     def __delattr__(self, item):
         return ObjectPromise._del(self, item, True)
-
-    def __call__(self, *args, **kwargs):
-        return self._get("__call__", False)(*args, **kwargs)
-
-    def __float__(self, *args, **kwargs):
-        return self._get("__float__", False)(*args, **kwargs)
-
-    def __int__(self, *args, **kwargs):
-        return self._get("__int__", False)(*args, **kwargs)
 
     def _get(self, item: str, imp):
         run = _is_sub_important
