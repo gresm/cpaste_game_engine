@@ -41,7 +41,8 @@ class GUIObjectPromise:
             anchors=self.anchors,
             visible=self.visible
         )
-        exec(self.on_load, None, {"self": ret})
+        if self.on_load:
+            exec(self.on_load, {"self": ret})
         return ret
 
 

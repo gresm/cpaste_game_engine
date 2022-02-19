@@ -28,15 +28,16 @@ open_gui = GUIPromise(
         "label1": Obj((25, 25, 200, 50), pgg.elements.UILabel, text="choose:"),
         "projects": Obj((50, 50, 200, 200), pgg.elements.UIScrollingContainer),
         "saves": Container(
-            (25, 25, 200, 100),
+            (200, 25, 200, 100),
             GUIPromise(
                 {
-                    "label1": Obj((25, 25, 200, 50), pgg.elements.UILabel, text="choose:"),
-                    "label2": Obj((25, 50, 200, 50), pgg.elements.UILabel, text="choose:"),
-                    "label3": Obj((25, 75, 200, 50), pgg.elements.UILabel, text="choose:"),
+                    "label1": Obj((0, 0, 200, 50), pgg.elements.UILabel, text="choose:"),
+                    "label2": Obj((0, 25, 200, 50), pgg.elements.UILabel, text="choose:"),
+                    "label3": Obj((0, 50, 200, 50), pgg.elements.UILabel, text="choose:"),
                 }
             ),
-            gui_type=pgg.elements.UIScrollingContainer
+            gui_type=pgg.elements.UIScrollingContainer,
+            on_load="self.set_scrollable_area_dimensions((150, 200))"
         )
     }
 )
