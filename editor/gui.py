@@ -15,7 +15,8 @@ class GUIObjectPromise:
             gui_type: Type[pgg.core.UIElement],
             container: pgg.core.ui_container.IContainerLikeInterface = None,
             anchors: dict[str, str] = None,
-            visible: int = 1, **kwargs
+            visible: int = 1,
+            *, on_load: str | None = None, **kwargs
     ):
         self.relative_rect = pg.Rect(relative_rect)
         self.gui_type = gui_type
@@ -24,13 +25,15 @@ class GUIObjectPromise:
         self.anchors = anchors
         self.visible = visible
 
+        self.on_load = on_load
+
         self.kwargs = kwargs
 
     def generate(
             self, ui_manager: pgg.core.interfaces.IUIManagerInterface,
             container: pgg.core.ui_container.IContainerLikeInterface = None
     ):
-        return self.gui_type(
+        ret = self.gui_type(
             relative_rect=self.relative_rect,
             manager=ui_manager,
             container=self.container or container,
@@ -38,6 +41,8 @@ class GUIObjectPromise:
             anchors=self.anchors,
             visible=self.visible
         )
+        exec(self.on_load, None, {"self": ret})
+        return ret
 
 
 class GUIPromise:
@@ -77,9 +82,12 @@ class GUIContainerPromise(GUIObjectPromise):
             gui_type: Type[pgg.core.UIElement | pgg.core.interfaces.IContainerLikeInterface] = UIContainer,
             container: pgg.core.ui_container.IContainerLikeInterface = None,
             anchors: dict[str, str] = None,
-            visible: int = 1, **kwargs
+            visible: int = 1,
+            *, on_load: str | None = None, **kwargs
     ):
-        super(GUIContainerPromise, self).__init__(relative_rect, gui_type, container, anchors, visible, **kwargs)
+        super(GUIContainerPromise, self).__init__(
+            relative_rect, gui_type, container, anchors, visible, on_load=on_load, **kwargs
+        )
         self.content = container_content
 
     def __getattr__(self, item) -> GUIObjectPromise | None:
