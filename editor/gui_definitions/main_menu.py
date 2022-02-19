@@ -1,6 +1,7 @@
 import pygame as pg
 import pygame_gui as pgg
 
+from .. import gui_extensions as ge
 from . import GUIPromise, Obj, Container
 
 menu_gui = GUIPromise(
@@ -33,11 +34,14 @@ open_gui = GUIPromise(
                 {
                     "label1": Obj((0, 0, 200, 50), pgg.elements.UILabel, text="choose:"),
                     "label2": Obj((0, 25, 200, 50), pgg.elements.UILabel, text="choose:"),
-                    "label3": Obj((0, 50, 200, 50), pgg.elements.UILabel, text="choose:"),
+                    "label3": Obj((0, 75, 200, 50), pgg.elements.UILabel, text="choose:"),
+                    "label4": Obj((0, 100, 200, 50), pgg.elements.UILabel, text="choose:"),
+                    "label5": Obj((0, 125, 200, 50), pgg.elements.UILabel, text="choose:"),
+
                 }
             ),
-            gui_type=pgg.elements.UIScrollingContainer,
-            on_load="self.set_scrollable_area_dimensions((150, 200))"
+            gui_type=ge.ScrollingContainer,
+            resize_automatically=0
         )
     }
 )
