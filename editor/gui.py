@@ -4,8 +4,6 @@ import pygame as pg
 import pygame_gui as pgg
 
 from . import themes, window as wd
-from .tools import ObjectPromise
-
 from typing import Type
 from pygame_gui.core.interfaces import IContainerLikeInterface
 from pygame_gui.core import UIContainer
@@ -27,13 +25,12 @@ class GUIObjectPromise:
         self.visible = visible
 
         self.kwargs = kwargs
-        self.promise = ObjectPromise()
 
     def generate(
             self, ui_manager: pgg.core.interfaces.IUIManagerInterface,
             container: pgg.core.ui_container.IContainerLikeInterface = None
     ):
-        ret = self.gui_type(
+        return self.gui_type(
             relative_rect=self.relative_rect,
             manager=ui_manager,
             container=self.container or container,
@@ -41,8 +38,6 @@ class GUIObjectPromise:
             anchors=self.anchors,
             visible=self.visible
         )
-        self.promise.solve(ret)
-        return ret
 
 
 class GUIPromise:
@@ -102,13 +97,16 @@ class GUIContainerPromise(GUIObjectPromise):
             self, ui_manager: pgg.core.interfaces.IUIManagerInterface,
             container: pgg.core.ui_container.IContainerLikeInterface = None
     ):
-        me = super(GUIContainerPromise, self).generate(ui_manager, container)
+        gen = super(GUIContainerPromise, self).generate(ui_manager, container)
+        me = gen
         if isinstance(me, IContainerLikeInterface):
             me = me.get_container()
 
         # noinspection PyTypeChecker
         content = self.content.generate(ui_manager, me)
-        return GUIContainerGenerated(content, me)
+        for name in content.generated:
+            me.add_element(content.generated[name])
+        return GUIContainerGenerated(content, gen)
 
 
 class GUIGenerated:
@@ -132,20 +130,24 @@ class GUIGenerated:
 
 class GUIContainerGenerated:
     def __init__(self, generated: GUIGenerated, container: pgg.core.UIElement):
-        self.generated = generated
+        self._generated = generated
+        self.generated = self._generated.generated
         self.container = container
 
         for name in generated.generated:
-            self.__dict__[name] = self.generated.generated[name]
+            self.__dict__[name] = self._generated.generated[name]
 
     def __getattr__(self, item) -> pgg.core.UIElement | None | object | type:
-        if item in self.generated:
-            return self.generated.generated[item]
+        if item in self._generated:
+            return self._generated.generated[item]
         return getattr(self.container, item, None)
 
     def __contains__(self, item: str):
-        return (item in self.generated or item in dir(self.container))\
+        return (item in self._generated or item in dir(self.container))\
                and not (item.startswith("__") or item.endswith("__"))
+
+    def __getitem__(self, item):
+        return self.__getattr__(item)
 
 
 def draw(surface: pg.Surface):
