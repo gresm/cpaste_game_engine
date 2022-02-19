@@ -73,7 +73,7 @@ class GUIPromise:
 class GUIContainerPromise(GUIObjectPromise):
     def __init__(
             self, relative_rect: pg.Rect | tuple[int, int, int, int],
-            container_content: GUIPromise,
+            container_content: GUIPromise | GUIContainerPromise,
             gui_type: Type[pgg.core.UIElement | pgg.core.interfaces.IContainerLikeInterface] = UIContainer,
             container: pgg.core.ui_container.IContainerLikeInterface = None,
             anchors: dict[str, str] = None,
@@ -98,15 +98,11 @@ class GUIContainerPromise(GUIObjectPromise):
             container: pgg.core.ui_container.IContainerLikeInterface = None
     ):
         gen = super(GUIContainerPromise, self).generate(ui_manager, container)
-        me = gen
-        if isinstance(me, IContainerLikeInterface):
-            me = me.get_container()
-
-        # noinspection PyTypeChecker
-        content = self.content.generate(ui_manager, me)
-        for name in content.generated:
-            me.add_element(content.generated[name])
-        return GUIContainerGenerated(content, gen)
+        if isinstance(gen, IContainerLikeInterface):
+            content = self.content.generate(ui_manager, gen)
+            return GUIContainerGenerated(content, gen)
+        content = self.content.generate(ui_manager, container)
+        return GUIContainerGenerated(content, container)
 
 
 class GUIGenerated:
@@ -129,7 +125,7 @@ class GUIGenerated:
 
 
 class GUIContainerGenerated:
-    def __init__(self, generated: GUIGenerated, container: pgg.core.UIElement):
+    def __init__(self, generated: GUIGenerated, container: pgg.core.UIElement | IContainerLikeInterface):
         self._generated = generated
         self.generated = self._generated.generated
         self.container = container
