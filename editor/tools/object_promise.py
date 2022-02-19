@@ -29,7 +29,12 @@ def _is_sub_important(key: str):
 
 def _generate_magic_method(name: str):
     gl = {}
-    exec(f"def {name}(self, *args, **kwargs):\n return self._get(\"{name}\", False)(*args, **kwargs)", gl)
+    exec(f"""def {name}(self, *args, **kwargs):
+    try:
+        val = self._get("{name}", False)
+    except AttributeError:
+        return
+    return val(*args, **kwargs)""", gl)
     return gl[name]
 
 
